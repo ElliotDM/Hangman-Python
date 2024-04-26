@@ -12,7 +12,8 @@ class Window(tk.Tk):
         self.resizable(0, 0)
 
         self._font = font.Font(family="Ubuntu", size="24")
-        self._tries = 6
+        self._tries: int = 6
+        self._animal: str = self.get_word()
 
         self._create_board()
 
@@ -27,14 +28,15 @@ class Window(tk.Tk):
                                 bg="#FFFFFF",
                                 height=300,
                                 width=300)
-        
-        # TODO: draw scenario on the canvas
-        
-        self.animal = self.get_word()
-        self.format_word = ""
-        print(self.animal)
 
-        for _ in self.animal:
+        self.canvas.create_line(150, 38.3, 150, 8.3, width=5)
+        self.canvas.create_line(150, 8.3, 60, 8.3, width=5)
+        self.canvas.create_line(60, 8.3, 60, 290, width=5)
+        self.canvas.create_line(60, 290, 240, 290, width=5)
+        
+        self.format_word: str = ""
+
+        for _ in self._animal:
             self.format_word = self.format_word + "_ "
 
         self.word = tk.Label(self.frame,
@@ -51,9 +53,9 @@ class Window(tk.Tk):
         self.temp: list = []
         self.aux: str = ""
 
-        if letter.capitalize() in self.animal:
-            for idx in range(len(self.animal)):
-                if self.animal[idx] == letter.capitalize():
+        if letter.capitalize() in self._animal:
+            for idx in range(len(self._animal)):
+                if self._animal[idx] == letter.capitalize():
                     self.guess[idx] = letter.capitalize()
 
             for idx in range(len(self.guess)):
@@ -84,7 +86,9 @@ class Window(tk.Tk):
             self.canvas.create_line(150, 191.6, 180, 271.6, width=3)
         elif self._tries == 0:
             self.canvas.create_line(150, 191.6, 120, 271.6, width=3)
-            messagebox.showinfo("You lose", "The word was " + self.animal)
+            messagebox.showinfo("You lose", "The word was " + self._animal)
+
+        # TODO: add restart option
 
     def get_word(self) -> str:
         self.animals = [
