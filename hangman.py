@@ -28,6 +28,8 @@ class Window(tk.Tk):
                                 height=300,
                                 width=300)
         
+        # TODO: draw scenario on the canvas
+        
         self.animal = self.get_word()
         self.format_word = ""
         print(self.animal)
@@ -45,13 +47,30 @@ class Window(tk.Tk):
         self.word.pack()
 
     def _game_logic(self, letter: str) -> None:
-        print(letter.capitalize())
+        self.guess: list = self.word.cget("text").split()
+        self.temp: list = []
+        self.aux: str = ""
 
         if letter.capitalize() in self.animal:
+            for idx in range(len(self.animal)):
+                if self.animal[idx] == letter.capitalize():
+                    self.guess[idx] = letter.capitalize()
+
+            for idx in range(len(self.guess)):
+                self.temp.append(self.guess[idx])
+                self.temp.append(" ")
+
+            for idx in range(len(self.temp)):
+                self.aux += self.temp[idx]
+
+            self.word.config(text=self.aux)
             self.label.config(text="OK")
         else:
             self.label.config(text="Try again")
             self._tries -= 1
+
+        if self.word.cget("text").find("_") == -1:
+            messagebox.showinfo("You won", "Congratulations!!!")
 
         if self._tries == 5:
             self.canvas.create_oval(118.3, 38.3, 181.6, 101.6, width=3)
